@@ -60,25 +60,19 @@ exports.deleteBook = async (req, res) => {
 };
 
 exports.searchBooks = async (req, res) => {
-  const { title, author } = req.query;
+  const { title } = req.query;
 
   try {
     const query = {};
 
     if (title) {
-      query.title = { $regex: `^${title}`, $options: "i" };
+      query.title = { $regex: title, $options: "i" };
     }
-
-    if (author) {
-      query.author = { $regex: `^${author}`, $options: "i" };
-    }
-
-    console.log("🔍 Query:", query); // ✅ تتبع هنا
 
     const books = await Book.find(query);
     res.json(books);
   } catch (error) {
-    console.error("❌ Error in searchBooks:", error); // ✅ تتبع الخطأ
+    console.error("❌ Error in searchBooks:", error);
     res.status(500).json({ message: "Error fetching book" });
   }
 };
